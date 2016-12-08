@@ -24,18 +24,22 @@ int main(int argc, char *argv[]){
   int key = ftok(argv[0], 22);
   
   if (strcmp(argv[1], "-c") == 0){
-    int sd = shmget(key, 4, IPC_CREAT|0644);
+    int shmid = shmget(key, 4, IPC_CREAT|0644);
     struct shmid_ds buf;
     int semid = semget(key, 1, IPC_CREAT|0644);
     union semun data;
     data.val = 1;
     int file = open("story.txt", O_TRUNC, 0644);
-    shmctl(sd, IPC_SET, &buf);
+
+    shmctl(shmid, IPC_STAT, &buf);
     semctl(semid, 0, IPC_SETVAL, data);
     printf("sem val: %d\n", data);
   }
   else if (strcmp(argv[1], "-r") == 0){
-
+    int shmid = shmget(key, 4, 0);
+    int semid = semget(key, 1, 0);
+    shmctl(shmid, IPC_RMID, &buf);
+    semctl(semid, 0, IPC_RMID);
   }
   else {
     printf("invalid argument");
