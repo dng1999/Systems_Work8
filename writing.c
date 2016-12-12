@@ -10,7 +10,7 @@
 
 int main()
 {
-    int key = ftok("Makefile", 22);
+    int key = ftok("makefile", 22);
 
     int semid = semget(key, 1, 0);
     struct sembuf sb;
@@ -31,18 +31,17 @@ int main()
         int fd = open("story.txt", O_RDONLY);
         lseek(fd, -*len, SEEK_END);
         read(fd, s, *len * sizeof(char));
-        printf("%s\n", s);
+        printf("\t> %s\n", s);
         free(s);
     }
     printf("Add: ");
     char s[512];
     fgets(s, sizeof(s), stdin);
-    int fd = open("story.txt", O_WRONLY);
+    int fd = open("story.txt", O_WRONLY|O_APPEND);
     write(fd, s, strlen(s));
     close(fd);
     *len = strlen(s);
 
     sb.sem_op = 1;
     semop(semid, &sb, 1);
-
 }

@@ -3,6 +3,7 @@ compile: rsctrl.c writing.c
 	gcc writing.c -o writing
 
 clean:
-	rm rsctrl
-	rm writing
-	rm *~
+	rm -f rsctrl
+	rm -f writing
+	rm -f story.txt
+	rm -rf *~
